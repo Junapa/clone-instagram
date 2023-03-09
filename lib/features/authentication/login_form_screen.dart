@@ -10,6 +10,7 @@ class LoginFormScreen extends StatefulWidget {
   State<LoginFormScreen> createState() => _LoginFormScreenState();
 }
 
+// 이부분이 추가됫음햐
 class _LoginFormScreenState extends State<LoginFormScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final Map<String, String> _formData = {};
