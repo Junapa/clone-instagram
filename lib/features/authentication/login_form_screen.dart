@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:tiktok_clone/contants/gaps.dart';
 import 'package:tiktok_clone/contants/sizes.dart';
 import 'package:tiktok_clone/features/authentication/widgets/form_button.dart';
@@ -10,10 +11,10 @@ class LoginFormScreen extends StatefulWidget {
   State<LoginFormScreen> createState() => _LoginFormScreenState();
 }
 
-// 이부분이 추가됫음햐
 class _LoginFormScreenState extends State<LoginFormScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final Map<String, String> _formData = {};
+  bool _obscureText = true;
   void _onScaffoldTap() {
     FocusScope.of(context).unfocus();
   }
@@ -22,9 +23,14 @@ class _LoginFormScreenState extends State<LoginFormScreen> {
     if (_formKey.currentState != null) {
       if (_formKey.currentState!.validate()) {
         _formKey.currentState!.save();
-        print(_formData);
       }
     }
+  }
+
+  void _toggleObsecureText() {
+    setState(() {
+      _obscureText = !_obscureText;
+    });
   }
 
   @override
@@ -59,8 +65,19 @@ class _LoginFormScreenState extends State<LoginFormScreen> {
                 ),
                 Gaps.v16,
                 TextFormField(
-                  decoration: const InputDecoration(
+                  obscureText: _obscureText,
+                  decoration: InputDecoration(
                     hintText: "Password",
+                    suffix: GestureDetector(
+                      onTap: _toggleObsecureText,
+                      child: FaIcon(
+                        _obscureText
+                            ? FontAwesomeIcons.solidEye
+                            : FontAwesomeIcons.eyeSlash,
+                        color: Colors.grey.shade500,
+                        size: Sizes.size20,
+                      ),
+                    ),
                   ),
                   validator: (value) {
                     return null;
