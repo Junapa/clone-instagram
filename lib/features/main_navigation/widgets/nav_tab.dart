@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:tiktok_clone/contants/gaps.dart';
-import 'package:tiktok_clone/contants/sizes.dart';
 
 class NavTab extends StatelessWidget {
   final String title;
   final IconData icon;
+  final IconData selectedIcon;
   final bool isSelected;
   final VoidCallback onTap;
   const NavTab(
@@ -13,7 +13,8 @@ class NavTab extends StatelessWidget {
       required this.title,
       required this.icon,
       required this.isSelected,
-      required this.onTap});
+      required this.onTap,
+      required this.selectedIcon});
 
   @override
   Widget build(BuildContext context) {
@@ -29,16 +30,14 @@ class NavTab extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 FaIcon(
-                  icon,
+                  isSelected ? selectedIcon : icon,
                   color: Colors.white,
-                  size: isSelected ? Sizes.size24 : Sizes.size20,
                 ),
                 Gaps.v5,
                 Text(
                   title,
-                  style: TextStyle(
+                  style: const TextStyle(
                     color: Colors.white,
-                    fontSize: isSelected ? Sizes.size14 : Sizes.size10,
                   ),
                 )
               ],
