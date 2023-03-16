@@ -11,7 +11,7 @@ class VideoTimelineScreen extends StatefulWidget {
 class _VideoTimelineScreenState extends State<VideoTimelineScreen> {
   int _itemCount = 4;
   final PageController _pageController = PageController();
-  final Duration _scrollDuration = const Duration(milliseconds: 300);
+  final Duration _scrollDuration = const Duration(milliseconds: 250);
   final Curve _scrollCurve = Curves.linear;
 
   void _onPageChange(int page) {
@@ -48,7 +48,7 @@ class _VideoTimelineScreenState extends State<VideoTimelineScreen> {
       itemCount: _itemCount,
       scrollDirection: Axis.vertical,
       itemBuilder: (context, index) =>
-          VideoPost(onVideoFinished: _onVideoFinished),
+          VideoPost(onVideoFinished: _onVideoFinished, index: index),
     );
   }
 }
