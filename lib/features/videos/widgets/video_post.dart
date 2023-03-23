@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:tiktok_clone/contants/gaps.dart';
 import 'package:tiktok_clone/contants/sizes.dart';
+import 'package:tiktok_clone/features/videos/widgets/video_button.dart';
 import 'package:video_player/video_player.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
@@ -19,10 +21,12 @@ class VideoPost extends StatefulWidget {
 
 class _VideoPostState extends State<VideoPost>
     with SingleTickerProviderStateMixin {
-  final VideoPlayerController _videoPlayerController =
-      VideoPlayerController.asset("assets/videos/20230102_175813.mp4");
-  late final AnimationController _animationController;
+  late final VideoPlayerController _videoPlayerController;
+
+  late final AnimationController _animationController; // pause and play button
+
   bool _isPaused = false;
+
   final Duration _animationDuration = const Duration(milliseconds: 200);
 
   @override
@@ -35,11 +39,6 @@ class _VideoPostState extends State<VideoPost>
       upperBound: 1.5,
       value: 1.5,
       duration: _animationDuration,
-    );
-    _animationController.addListener(
-      () {
-        setState(() {});
-      },
     );
   }
 
@@ -61,12 +60,12 @@ class _VideoPostState extends State<VideoPost>
   }
 
   void _initVideoPlayer() async {
-    await _videoPlayerController.initialize(); // 초기화 먼저
-
-    setState(
-        () {}); //  so build method knows video controller has been initialised.
-    _videoPlayerController.addListener(
-        _onVideoChange); // to see weather video is still playing or finished
+    _videoPlayerController =
+        VideoPlayerController.asset("assets/videos/20230102_175813.mp4");
+    await _videoPlayerController.initialize();
+    await _videoPlayerController.setLooping(true);
+    _videoPlayerController.addListener(_onVideoChange);
+    setState(() {});
   }
 
   void _togglePause() {
@@ -110,8 +109,14 @@ class _VideoPostState extends State<VideoPost>
           Positioned.fill(
             child: IgnorePointer(
               child: Center(
-                child: Transform.scale(
-                  scale: _animationController.value,
+                child: AnimatedBuilder(
+                  animation: _animationController,
+                  builder: (context, child) {
+                    return Transform.scale(
+                      scale: _animationController.value,
+                      child: child,
+                    );
+                  },
                   child: AnimatedOpacity(
                     duration: _animationDuration,
                     opacity: _isPaused ? 1 : 0,
@@ -125,6 +130,60 @@ class _VideoPostState extends State<VideoPost>
               ),
             ),
           ),
+          const Positioned(
+            bottom: 10,
+            left: 20,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "@JUN",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: Sizes.size16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                Gaps.v10,
+                Text(
+                  "This is my cat in Sydney",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: Sizes.size14,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const Positioned(
+            bottom: 20,
+            right: 10,
+            child: Column(
+              children: [
+                CircleAvatar(
+                  radius: 25,
+                  backgroundColor: Colors.black,
+                  foregroundColor: Colors.white,
+                  child: Text("JUN"),
+                ),
+                Gaps.v24,
+                VideoButton(
+                  text: "2.9M",
+                  icon: FontAwesomeIcons.solidHeart,
+                ),
+                Gaps.v24,
+                VideoButton(
+                  text: "33K",
+                  icon: FontAwesomeIcons.solidComment,
+                ),
+                Gaps.v24,
+                VideoButton(
+                  text: "Share",
+                  icon: FontAwesomeIcons.share,
+                ),
+              ],
+            ),
+          )
         ],
       ),
     );
