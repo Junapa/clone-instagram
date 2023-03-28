@@ -3,6 +3,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:tiktok_clone/contants/gaps.dart';
 import 'package:tiktok_clone/contants/sizes.dart';
 import 'package:tiktok_clone/features/videos/widgets/video_button.dart';
+import 'package:tiktok_clone/features/videos/widgets/video_comments.dart';
 import 'package:video_player/video_player.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
@@ -23,7 +24,8 @@ class _VideoPostState extends State<VideoPost>
     with SingleTickerProviderStateMixin {
   late final VideoPlayerController _videoPlayerController;
 
-  late final AnimationController _animationController; // pause and play button
+  late final AnimationController
+      _animationController; // animiation for pause and play button
 
   bool _isPaused = false;
 
@@ -54,7 +56,9 @@ class _VideoPostState extends State<VideoPost>
   }
 
   void _onVisibilityChange(VisibilityInfo info) {
-    if (info.visibleFraction == 1 && !_videoPlayerController.value.isPlaying) {
+    if (info.visibleFraction == 1 &&
+        !_isPaused &&
+        !_videoPlayerController.value.isPlaying) {
       _videoPlayerController.play();
     }
   }
@@ -85,6 +89,20 @@ class _VideoPostState extends State<VideoPost>
   void dispose() {
     _videoPlayerController.dispose();
     super.dispose();
+  }
+
+  void _onCommentsTap(BuildContext context) async {
+    if (_videoPlayerController.value.isPlaying) {
+      _togglePause();
+    }
+    await showModalBottomSheet(
+      context: context,
+      isScrollControlled:
+          true, // listview 를 쓸거면 should set as true to control the size
+      backgroundColor: Colors.transparent,
+      builder: (context) => const VideoComments(),
+    );
+    _togglePause();
   }
 
   @override
@@ -155,29 +173,32 @@ class _VideoPostState extends State<VideoPost>
               ],
             ),
           ),
-          const Positioned(
+          Positioned(
             bottom: 20,
             right: 10,
             child: Column(
               children: [
-                CircleAvatar(
+                const CircleAvatar(
                   radius: 25,
                   backgroundColor: Colors.black,
                   foregroundColor: Colors.white,
                   child: Text("JUN"),
                 ),
                 Gaps.v24,
-                VideoButton(
+                const VideoButton(
                   text: "2.9M",
                   icon: FontAwesomeIcons.solidHeart,
                 ),
                 Gaps.v24,
-                VideoButton(
-                  text: "33K",
-                  icon: FontAwesomeIcons.solidComment,
+                GestureDetector(
+                  onTap: () => _onCommentsTap(context),
+                  child: const VideoButton(
+                    text: "33K",
+                    icon: FontAwesomeIcons.solidComment,
+                  ),
                 ),
                 Gaps.v24,
-                VideoButton(
+                const VideoButton(
                   text: "Share",
                   icon: FontAwesomeIcons.share,
                 ),
