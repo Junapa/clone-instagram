@@ -17,7 +17,7 @@ class _ActivityScreenState extends State<ActivityScreen>
   bool _showBarrier = false;
 
   late final AnimationController _animationController = AnimationController(
-      vsync: this, duration: const Duration(milliseconds: 1500));
+      vsync: this, duration: const Duration(milliseconds: 150));
 
   late final Animation<double> _arrowAnimation = Tween(
     begin: 0.0,
@@ -90,26 +90,22 @@ class _ActivityScreenState extends State<ActivityScreen>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Padding(
-          padding: const EdgeInsets.only(
-            top: Sizes.size20,
-          ),
-          child: GestureDetector(
-            onTap: _toggleAnimations,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Text("All activity"),
-                Gaps.h4,
-                RotationTransition(
-                  turns: _arrowAnimation,
-                  child: const FaIcon(
-                    FontAwesomeIcons.chevronDown,
-                    size: Sizes.size14,
-                  ),
-                )
-              ],
-            ),
+        title: GestureDetector(
+          onTap: _toggleAnimations,
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Text("All activity"),
+              Gaps.h4,
+              RotationTransition(
+                turns: _arrowAnimation,
+                child: const FaIcon(
+                  FontAwesomeIcons.chevronDown,
+                  size: Sizes.size14,
+                ),
+              )
+            ],
           ),
         ),
       ),
